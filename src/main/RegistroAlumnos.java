@@ -32,8 +32,6 @@ public class RegistroAlumnos {
             sc.nextLine(); 
         }
      
-        
-        //Menú plus
         int opc;
 
         do{
@@ -50,10 +48,8 @@ public class RegistroAlumnos {
             }catch(Exception e) {
                 System.err.println(e + "\n");
                 sc.nextLine(); 
-            }
-            
+            } 
         }while(opc != 5);
-
     }
 
     public static void agregarAlumno() throws IOException{
@@ -76,7 +72,7 @@ public class RegistroAlumnos {
         
             Alumno alumno = new Alumno(nombre, apellido, edad, curso, dni);
         
-            bw.write(nombre + ", " + apellido + ", " + edad + ", " + curso + ", " + dni);
+            bw.write(nombre + ";" + apellido + ";" + edad + ";" + curso + ";" + dni);
             bw.write(salto);
             bw.flush();
             bw.close();
@@ -94,16 +90,16 @@ public class RegistroAlumnos {
 
     }
     
-   public static void eliminarAlumno() throws IOException {
+    public static void eliminarAlumno() throws IOException {
         String linea;
         String temporal = "";
         boolean encontrado = false;
-        
+
         System.out.println("Lista de alumnos:");
         BufferedReader br = new BufferedReader(new FileReader(registro));
-        while((linea = br.readLine())!= null){
-                System.out.println(linea);
-            }
+        while ((linea = br.readLine()) != null) {
+            System.out.println(linea);
+        }
         br.close();
 
         System.out.println("Escriba el DNI del alumno a eliminar:");
@@ -111,44 +107,49 @@ public class RegistroAlumnos {
 
         br = new BufferedReader(new FileReader(registro));
         while ((linea = br.readLine()) != null) {
-            if (!linea.contains(dni)) {
+            String[] partes = linea.split(";");
+            String dniArchivo = partes[4];
+
+            if (!dniArchivo.equals(dni)) {
                 temporal += linea + salto;
             } else {
                 encontrado = true;
             }
         }
         br.close();
-        
-        if (encontrado) {
-            BufferedWriter bw = new BufferedWriter (new FileWriter(registro));
-            bw.write(temporal);
-            bw.flush();
-            bw.close();
-            System.out.println("Alumno eliminado correctamente");
-        } else {
-            System.out.println("No se ha econtrado este DNI");
+
+            if (encontrado) {
+                BufferedWriter bw = new BufferedWriter(new FileWriter(registro));
+                bw.write(temporal);
+                bw.close();
+                System.out.println("Alumno eliminado correctamente");
+            } else {
+                System.out.println("No se ha encontrado este DNI");
+            }
         }
-}
    
-    public static void buscarDNI() throws IOException{    
+    public static void buscarDNI() throws IOException {    
         String linea;
         boolean encontrado = false;
-        System.out.println("Escriba el DNI del alumno::");
+
+        System.out.println("Escriba el DNI del alumno:");
         String dni = sc.nextLine();
 
         BufferedReader br = new BufferedReader(new FileReader(registro));
-        while((linea = br.readLine())!= null){
-                if(linea.contains(dni)){
-                    System.out.println(linea);
-                    encontrado = true;
-                }
+        while ((linea = br.readLine()) != null) {
+            String[] partes = linea.split(";");
+            String dniArchivo = partes[4];
+
+            if (dniArchivo.equals(dni)) {
+                System.out.println(linea);
+                encontrado = true;
             }
+        }
         br.close();
 
-        if(!encontrado){
+        if (!encontrado) {
             System.out.println("No se ha encontrado este DNI");
         }
-
     }
 
     public static int menu(){
