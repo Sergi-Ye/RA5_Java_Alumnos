@@ -4,10 +4,6 @@
  */
 package main;
 
-/**
- *
- * @author Joan
- */
 public class Alumno {
 
     private String nombre;
